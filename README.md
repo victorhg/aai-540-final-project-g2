@@ -6,6 +6,7 @@ Shiley-Marcos School of Engineering, University of San Diego AAI-540: Machine Le
 
 - Robair Farag
 - Victor Hugo Germano
+- Donavan Trigg
 
 
 
