@@ -12,6 +12,9 @@ Shiley-Marcos School of Engineering, University of San Diego AAI-540: Machine Le
 ### Files
 
 - [Google Drive Folder](https://drive.google.com/drive/u/1/folders/1yzb8fiOJCtNZSd8VNexrPY2pnsg3dhYl)
+- Asana Link: https://app.asana.com/1/952672460738672/project/1212760617447443/board/1212760670046520
+  
+  
 
 
 ## Objective
