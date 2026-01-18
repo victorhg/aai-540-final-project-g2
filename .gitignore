@@ -1,0 +1,12 @@
+# data / archives
+*.zip
+*.wav
+datasets/
+data/
+
+# notebooks
+.ipynb_checkpoints/
+
+# python
+__pycache__/
+.env
