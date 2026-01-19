@@ -3,6 +3,7 @@
 *.wav
 datasets/
 data/
+.DS_Store
 
 # notebooks
 .ipynb_checkpoints/
