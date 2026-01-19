@@ -1,0 +1,18 @@
+Join key: filepath
+Split column: data_split
+
+Baseline Accuracy: 0.4119
+Baseline F1 (weighted): 0.4015
+
+              precision    recall  f1-score   support
+
+         ANG       0.56      0.67      0.61       195
+         DIS       0.31      0.36      0.33       195
+         FEA       0.33      0.22      0.26       195
+         HAP       0.46      0.37      0.41       195
+         NEU       0.31      0.25      0.28       166
+         SAD       0.44      0.58      0.50       195
+
+    accuracy                           0.41      1141
+   macro avg       0.40      0.41      0.40      1141
+weighted avg       0.40      0.41      0.40      1141
