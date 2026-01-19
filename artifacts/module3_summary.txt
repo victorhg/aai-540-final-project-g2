@@ -1,0 +1,25 @@
+Module 3 Artifacts Summary
+==========================
+
+WAV files: 7442
+Speakers: 91
+
+Split counts:
+split
+train    5154
+val      1147
+test     1141
+
+Emotion counts:
+emotion
+ANG    1271
+DIS    1271
+SAD    1271
+FEA    1271
+HAP    1271
+NEU    1087
+
+Artifacts:
+- artifacts/cremad_splits.csv
+- artifacts/cremad_mfcc_features.parquet
+- artifacts/module3_summary.txt
