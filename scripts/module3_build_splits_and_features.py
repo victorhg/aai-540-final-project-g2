@@ -49,7 +49,7 @@ def extract_comprehensive_features(file_path):
     # Tempo and rhythm
     try:
         tempo, _ = librosa.beat.beat_track(y=y_trimmed, sr=sr)
-        features['tempo'] = tempo
+        features['tempo'] = float(tempo)
     except:
         features['tempo'] = 0
     
@@ -79,8 +79,6 @@ def parse_cremad_filename(p: Path) -> dict | None:
         return None
     speaker_id, sentence_id, emotion, intensity = parts[0], parts[1], parts[2], parts[3]
 
-    song_features = extract_comprehensive_features(p)
-
     return {
         "filepath": str(p),
         "speaker_id": speaker_id,
@@ -88,8 +86,7 @@ def parse_cremad_filename(p: Path) -> dict | None:
         "emotion": emotion,
         "intensity": intensity,
         "dataset": "CREMA-D",
-        "language": "en",
-        **song_features,
+        "language": "en"
     }
 
 
@@ -118,9 +115,13 @@ def main():
 
     # Build metadata
     rows = []
-    for p in wavs:
+    for p in tqdm(wavs, desc="Processing WAV files"):
         rec = parse_cremad_filename(p)
         if rec:
+            # Extract comprehensive features
+            song_features = extract_comprehensive_features(p)
+            rec.update(song_features)
+
             rows.append(rec)
     df = pd.DataFrame(rows)
 
@@ -138,21 +139,12 @@ def main():
 
     df["split"] = df["speaker_id"].apply(split_from_speaker)
 
-    splits_csv = out_dir / "cremad_splits.csv"
+    splits_csv = out_dir / "cremad_processed.csv"
     df.to_csv(splits_csv, index=False)
 
-    # Feature extraction (MFCC mean)
-    feats = []
-    for fp in tqdm(df["filepath"].tolist(), desc="Extracting MFCC"):
-        feats.append(mfcc_mean(fp, sr=args.sr, n_mfcc=args.n_mfcc))
-
-    X = np.vstack(feats)
-    feat_cols = [f"mfcc_{i}" for i in range(X.shape[1])]
-    feat_df = pd.DataFrame(X, columns=feat_cols)
-
-    full_df = pd.concat([df.reset_index(drop=True), feat_df], axis=1)
-    out_parquet = out_dir / "cremad_mfcc_features.parquet"
-    full_df.to_parquet(out_parquet, index=False)
+   
+    out_parquet = out_dir / "cremad_processed.parquet"
+    df.to_parquet(out_parquet, index=False)
 
     # Small summary text for the report
     summary_txt = out_dir / "module3_summary.txt"
