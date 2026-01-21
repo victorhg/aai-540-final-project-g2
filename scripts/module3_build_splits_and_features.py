@@ -11,12 +11,76 @@ import librosa
 from sklearn.model_selection import train_test_split
 
 
+def extract_comprehensive_features(file_path):
+    """Extract comprehensive audio features for emotion recognition"""
+    y, sr = librosa.load(file_path, sr=None)
+    y_trimmed, _ = librosa.effects.trim(y, top_db=30)
+    
+    features = {}
+    
+    # Basic features
+    features['duration'] = librosa.get_duration(y=y, sr=sr)
+    features['rms_mean'] = np.mean(librosa.feature.rms(y=y_trimmed))
+    features['zcr_mean'] = np.mean(librosa.feature.zero_crossing_rate(y_trimmed))
+    
+    # Spectral features
+    spectral_centroid = librosa.feature.spectral_centroid(y=y_trimmed, sr=sr)
+    spectral_rolloff = librosa.feature.spectral_rolloff(y=y_trimmed, sr=sr)
+    spectral_bandwidth = librosa.feature.spectral_bandwidth(y=y_trimmed, sr=sr)
+    spectral_contrast = librosa.feature.spectral_contrast(y=y_trimmed, sr=sr)
+    
+    features['spectral_centroid_mean'] = np.mean(spectral_centroid)
+    features['spectral_centroid_std'] = np.std(spectral_centroid)
+    features['spectral_rolloff_mean'] = np.mean(spectral_rolloff)
+    features['spectral_bandwidth_mean'] = np.mean(spectral_bandwidth)
+    features['spectral_contrast_mean'] = np.mean(spectral_contrast)
+    
+    # MFCCs (first 13 coefficients)
+    mfccs = librosa.feature.mfcc(y=y_trimmed, sr=sr, n_mfcc=13)
+    for i in range(13):
+        features[f'mfcc_{i+1}_mean'] = np.mean(mfccs[i])
+        features[f'mfcc_{i+1}_std'] = np.std(mfccs[i])
+    
+    # Chroma features
+    chroma = librosa.feature.chroma_stft(y=y_trimmed, sr=sr)
+    features['chroma_mean'] = np.mean(chroma)
+    features['chroma_std'] = np.std(chroma)
+    
+    # Tempo and rhythm
+    try:
+        tempo, _ = librosa.beat.beat_track(y=y_trimmed, sr=sr)
+        features['tempo'] = tempo
+    except:
+        features['tempo'] = 0
+    
+    # Pitch features
+    try:
+        f0, voiced_flag, voiced_probs = librosa.pyin(y_trimmed, 
+                                                    fmin=librosa.note_to_hz('C2'), 
+                                                    fmax=librosa.note_to_hz('C7'))
+        f0_voiced = f0[voiced_flag]
+        if len(f0_voiced) > 0:
+            features['pitch_mean'] = np.mean(f0_voiced)
+            features['pitch_std'] = np.std(f0_voiced)
+            features['pitch_range'] = np.max(f0_voiced) - np.min(f0_voiced)
+        else:
+            features['pitch_mean'] = features['pitch_std'] = features['pitch_range'] = 0
+        features['voicing_rate'] = np.sum(voiced_flag) / len(voiced_flag)
+    except:
+        features['pitch_mean'] = features['pitch_std'] = features['pitch_range'] = features['voicing_rate'] = 0
+    
+    return features
+
+
 def parse_cremad_filename(p: Path) -> dict | None:
     # Example: 1085_IWW_ANG_XX.wav
     parts = p.stem.split("_")
     if len(parts) < 4:
         return None
     speaker_id, sentence_id, emotion, intensity = parts[0], parts[1], parts[2], parts[3]
+
+    song_features = extract_comprehensive_features(p)
+
     return {
         "filepath": str(p),
         "speaker_id": speaker_id,
@@ -25,6 +89,7 @@ def parse_cremad_filename(p: Path) -> dict | None:
         "intensity": intensity,
         "dataset": "CREMA-D",
         "language": "en",
+        **song_features,
     }
 
 

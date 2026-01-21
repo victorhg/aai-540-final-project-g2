@@ -1,0 +1,27 @@
+-- requirements.txt
+
+
+
+-- AWS Libraries --
+awswrangler 
+sagemaker
+pyathena
+boto3 
+botocore 
+awscli
+
+-- Data Processing Libraries --
+librosa 
+soundfile 
+audioread
+
+-- Machine Learning Libraries --
+datasets
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+torch
+
+jupyter
