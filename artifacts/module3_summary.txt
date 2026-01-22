@@ -6,9 +6,9 @@ Speakers: 91
 
 Split counts:
 split
-train    5154
+train    5148
+test     1147
 val      1147
-test     1141
 
 Emotion counts:
 emotion
@@ -20,6 +20,6 @@ HAP    1271
 NEU    1087
 
 Artifacts:
-- artifacts/cremad_splits.csv
-- artifacts/cremad_mfcc_features.parquet
+- artifacts/cremad_processed.csv
+- artifacts/cremad_processed.parquet
 - artifacts/module3_summary.txt
