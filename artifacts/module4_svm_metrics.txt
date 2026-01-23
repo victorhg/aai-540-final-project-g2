@@ -1,0 +1,20 @@
+Module 4 - Improved Model (LinearSVC)
+Features: cremad_mfcc_features.parquet
+Splits: cremad_splits.csv
+
+Accuracy: 0.3918
+Weighted F1: 0.3619
+
+              precision    recall  f1-score   support
+
+         ANG       0.46      0.72      0.56       195
+         DIS       0.31      0.28      0.29       195
+         FEA       0.38      0.11      0.17       195
+         HAP       0.42      0.30      0.35       195
+         NEU       0.30      0.28      0.29       166
+         SAD       0.41      0.65      0.50       195
+
+    accuracy                           0.39      1141
+   macro avg       0.38      0.39      0.36      1141
+weighted avg       0.38      0.39      0.36      1141
+
