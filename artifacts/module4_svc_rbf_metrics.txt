@@ -1,0 +1,17 @@
+Model: SVC (RBF)
+Train rows: 5154 | Test rows: 1141
+Accuracy: 0.4268
+Weighted F1: 0.4237
+
+              precision    recall  f1-score   support
+
+         ANG       0.55      0.63      0.59       195
+         DIS       0.34      0.41      0.37       195
+         FEA       0.37      0.28      0.32       195
+         HAP       0.36      0.34      0.35       195
+         NEU       0.42      0.42      0.42       166
+         SAD       0.52      0.48      0.50       195
+
+    accuracy                           0.43      1141
+   macro avg       0.42      0.43      0.42      1141
+weighted avg       0.42      0.43      0.42      1141
