@@ -1,0 +1,5 @@
+Source: artifacts/cremad_mfcc_features.parquet
+Total rows used: 6295
+Features: 40 (['mfcc_0', 'mfcc_1', 'mfcc_2', 'mfcc_3', 'mfcc_4'] ...)
+Labels: {'ANG': 0, 'DIS': 1, 'FEA': 2, 'HAP': 3, 'NEU': 4, 'SAD': 5}
+Train/Val/Test: 4639/515/1141
