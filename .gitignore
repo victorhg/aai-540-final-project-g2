@@ -17,3 +17,7 @@ __pycache__/
 .venv/
 __pycache__/
 *.pyc
+
+# Optional experiments (not part of final pipeline)
+artifacts/featurestore_sample_200.csv
+scripts/featurestore_create_and_ingest.py
