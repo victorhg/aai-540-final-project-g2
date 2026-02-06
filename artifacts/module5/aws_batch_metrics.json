@@ -1,0 +1,6 @@
+{
+  "test_rows": 1141,
+  "acc": 0.4268185801928133,
+  "f1_weighted": 0.4159734939777864,
+  "pred_file": "artifacts/module5/batch_preds/test_features.csv.out"
+}
