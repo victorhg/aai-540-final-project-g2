@@ -4,30 +4,27 @@ import tarfile
 import argparse
 import numpy as np
 import pandas as pd
+import xgboost as xgb
 from sklearn.metrics import accuracy_score
 
-def ensure_xgboost():
-    try:
-        import xgboost
-        return
-    except Exception:
-        import subprocess, sys
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "xgboost==1.7.6"])
-
 def find_model_file(extract_dir: str) -> str:
-    candidates = [
-        os.path.join(extract_dir, "xgboost-model"),
-        os.path.join(extract_dir, "model.bin"),
-        os.path.join(extract_dir, "model"),
-    ]
-    for c in candidates:
-        if os.path.exists(c):
-            return c
+    preferred = {"xgboost-model", "model.bin", "model"}
+    found = []
     for root, _, files in os.walk(extract_dir):
         for f in files:
-            if f in ("xgboost-model", "model.bin") or f.endswith(".bin"):
-                return os.path.join(root, f)
-    raise FileNotFoundError(f"Could not locate model file under {extract_dir}")
+            full = os.path.join(root, f)
+            found.append(full)
+            if f in preferred:
+                return full
+
+    if len(found) == 1:
+        return found[0]
+
+    for full in found:
+        if os.path.getsize(full) > 0:
+            return full
+
+    raise FileNotFoundError(f"Could not locate model file. Extracted files: {found[:25]}")
 
 def main():
     parser = argparse.ArgumentParser()
@@ -35,9 +32,6 @@ def main():
     parser.add_argument("--test-path", type=str, required=True)
     parser.add_argument("--output-dir", type=str, default="/opt/ml/processing/evaluation")
     args = parser.parse_args()
-
-    ensure_xgboost()
-    import xgboost as xgb
 
     os.makedirs(args.output_dir, exist_ok=True)
 
